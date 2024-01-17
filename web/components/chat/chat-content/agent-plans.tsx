@@ -25,7 +25,7 @@ function AgentPlans({ data }: Props) {
         return {
           key: index,
           label: (
-            <div>
+            <div className="whitespace-normal">
               <span>
                 {item.name} - {item.agent}
               </span>

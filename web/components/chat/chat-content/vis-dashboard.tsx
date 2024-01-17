@@ -38,9 +38,14 @@ function VisDashboard({ data }: Props) {
       {charts.map((row, index) => (
         <div key={`row-${index}`} className="flex gap-3">
           {row.map((chart, subIndex) => (
-            <div key={`chart-${subIndex}`} className="flex flex-1 flex-col p-4 rounded border border-gray-200 whitespace-normal">
-              {chart.title && <div className="mb-2 text-lg">{chart.title}</div>}
-              {chart.describe && <div className="mb-4 text-sm text-gray-500">{chart.describe}</div>}
+            <div
+              key={`chart-${subIndex}`}
+              className="flex flex-1 flex-col justify-between p-4 rounded border border-gray-200 dark:border-gray-500 whitespace-normal"
+            >
+              <div>
+                {chart.title && <div className="mb-2 text-lg">{chart.title}</div>}
+                {chart.describe && <div className="mb-4 text-sm text-gray-500">{chart.describe}</div>}
+              </div>
               <AutoChart data={chart.data} chartType={getChartType(chart.type)} />
             </div>
           ))}

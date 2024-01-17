@@ -18,8 +18,8 @@ function AgentMessages({ data }: Props) {
   return (
     <>
       {data.map((item, index) => (
-        <div key={index} className="bg-white py-3 px-4 rounded my-3 dark:bg-[#212121]">
-          <div className="flex items-center mb-4 text-sm">
+        <div key={index} className="rounded my-4 md:my-6">
+          <div className="flex items-center mb-3 text-sm">
             {item.model ? renderModelIcon(item.model) : <div className="rounded-full w-6 h-6 bg-gray-100" />}
             <div className="ml-2 opacity-70">
               {item.sender}
@@ -27,7 +27,7 @@ function AgentMessages({ data }: Props) {
               {item.receiver}
             </div>
           </div>
-          <div className="whitespace-normal">
+          <div className="whitespace-normal text-sm">
             <ReactMarkdown components={markdownComponents}>{item.markdown}</ReactMarkdown>
           </div>
         </div>

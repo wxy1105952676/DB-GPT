@@ -14,6 +14,7 @@ import VisConvertError from './vis-convert-error';
 import VisChart from './vis-chart';
 import VisDashboard from './vis-dashboard';
 import VisPlugin from './vis-plugin';
+import VisCode from './vis-code';
 
 type MarkdownComponent = Parameters<typeof ReactMarkdown>['0']['components'];
 
@@ -96,6 +97,15 @@ const basicComponents: MarkdownComponent = {
       }
     }
 
+    if (lang === 'vis-code') {
+      try {
+        const data = JSON.parse(content) as Parameters<typeof VisCode>[0]['data'];
+        return <VisCode data={data} />;
+      } catch (e) {
+        return <CodePreview language={lang} code={content} />;
+      }
+    }
+
     return (
       <>
         {!inline ? (
@@ -122,7 +132,7 @@ const basicComponents: MarkdownComponent = {
   },
   table({ children }) {
     return (
-      <table className="my-2 rounded-tl-md rounded-tr-md max-w-full bg-white dark:bg-gray-900 text-sm rounded-lg overflow-hidden">{children}</table>
+      <table className="my-2 rounded-tl-md rounded-tr-md max-w-full bg-white dark:bg-gray-800 text-sm rounded-lg overflow-hidden">{children}</table>
     );
   },
   thead({ children }) {

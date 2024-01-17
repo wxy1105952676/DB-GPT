@@ -91,6 +91,13 @@ const ChatContextProvider = ({ children }: { children: React.ReactElement }) => 
     },
   );
 
+  useEffect(() => {
+    if (dialogueList.length && scene === 'chat_agent') {
+      const agent = dialogueList.find((item) => item.conv_uid === chatId)?.select_param;
+      agent && setAgent(agent);
+    }
+  }, [dialogueList, scene, chatId]);
+
   const { data: modelList = [] } = useRequest(async () => {
     const [, res] = await apiInterceptors(getUsableModels());
     return res ?? [];

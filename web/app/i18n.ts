@@ -181,9 +181,10 @@ const en = {
   new_chat: 'New Chat',
   choice_agent_tip: 'Please choose an agent',
   no_context_tip: 'Please enter your question',
+  Terminal: 'Terminal',
 } as const;
 
-type I18nKeys = keyof typeof en;
+export type I18nKeys = keyof typeof en;
 
 export interface Resources {
   translation: Record<I18nKeys, string>;
@@ -368,6 +369,7 @@ const zh: Resources['translation'] = {
   new_chat: '创建会话',
   choice_agent_tip: '请选择代理',
   no_context_tip: '请输入你的问题',
+  Terminal: '终端',
 } as const;
 
 i18n.use(initReactI18next).init({
