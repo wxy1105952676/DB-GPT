@@ -16,6 +16,14 @@ from typing import (
 
 from dbgpt._private.pydantic import model_to_json
 from dbgpt.core.awel import TransformStreamAbsOperator
+from dbgpt.core.awel.flow import (
+    IOField,
+    OperatorCategory,
+    OperatorType,
+    Parameter,
+    ResourceCategory,
+    ViewMetadata,
+)
 from dbgpt.core.interface.llm import ModelOutput
 from dbgpt.core.operators import BaseLLM
 
@@ -37,6 +45,7 @@ class OpenAIParameters:
     api_base: Optional[str] = None
     api_key: Optional[str] = None
     api_version: Optional[str] = None
+    api_azure_deployment: Optional[str] = None
     full_url: Optional[str] = None
     proxies: Optional["ProxiesTypes"] = None
 
@@ -71,6 +80,9 @@ def _initialize_openai_v1(init_params: OpenAIParameters):
     )
     api_version = api_version or os.getenv("OPENAI_API_VERSION")
 
+    api_azure_deployment = init_params.api_azure_deployment or os.getenv(
+        "API_AZURE_DEPLOYMENT"
+    )
     if not base_url and full_url:
         base_url = full_url.split("/chat/completions")[0]
 
@@ -81,11 +93,8 @@ def _initialize_openai_v1(init_params: OpenAIParameters):
     if base_url.endswith("/"):
         base_url = base_url[:-1]
 
-    openai_params = {
-        "api_key": api_key,
-        "base_url": base_url,
-    }
-    return openai_params, api_type, api_version
+    openai_params = {"api_key": api_key, "base_url": base_url}
+    return openai_params, api_type, api_version, api_azure_deployment
 
 
 def _initialize_openai(params: OpenAIParameters):
@@ -127,13 +136,16 @@ def _initialize_openai(params: OpenAIParameters):
 def _build_openai_client(init_params: OpenAIParameters) -> Tuple[str, ClientType]:
     import httpx
 
-    openai_params, api_type, api_version = _initialize_openai_v1(init_params)
+    openai_params, api_type, api_version, api_azure_deployment = _initialize_openai_v1(
+        init_params
+    )
     if api_type == "azure":
         from openai import AsyncAzureOpenAI
 
         return api_type, AsyncAzureOpenAI(
             api_key=openai_params["api_key"],
             api_version=api_version,
+            azure_deployment=api_azure_deployment,
             azure_endpoint=openai_params["base_url"],
             http_client=httpx.AsyncClient(proxies=init_params.proxies),
         )
@@ -148,7 +160,34 @@ def _build_openai_client(init_params: OpenAIParameters) -> Tuple[str, ClientType
 class OpenAIStreamingOutputOperator(TransformStreamAbsOperator[ModelOutput, str]):
     """Transform ModelOutput to openai stream format."""
 
-    async def transform_stream(self, input_value: AsyncIterator[ModelOutput]):
+    metadata = ViewMetadata(
+        label="OpenAI Streaming Output Operator",
+        name="openai_streaming_output_operator",
+        operator_type=OperatorType.TRANSFORM_STREAM,
+        category=OperatorCategory.OUTPUT_PARSER,
+        description="The OpenAI streaming LLM operator.",
+        parameters=[],
+        inputs=[
+            IOField.build_from(
+                "Upstream Model Output",
+                "model_output",
+                ModelOutput,
+                is_list=True,
+                description="The model output of upstream.",
+            )
+        ],
+        outputs=[
+            IOField.build_from(
+                "Model Output",
+                "model_output",
+                str,
+                is_list=True,
+                description="The model output after transform to openai stream format",
+            )
+        ],
+    )
+
+    async def transform_stream(self, model_output: AsyncIterator[ModelOutput]):
         async def model_caller() -> str:
             """Read model name from share data.
             In streaming mode, this transform_stream function will be executed
@@ -158,7 +197,7 @@ class OpenAIStreamingOutputOperator(TransformStreamAbsOperator[ModelOutput, str]
                 BaseLLM.SHARE_DATA_KEY_MODEL_NAME
             )
 
-        async for output in _to_openai_stream(input_value, None, model_caller):
+        async for output in _to_openai_stream(model_output, None, model_caller):
             yield output
 
 

@@ -44,6 +44,8 @@ DB-GPT is an open-source, data-domain large model framework. Its purpose is to b
 In the Data 3.0 era, based on models and databases, enterprises and developers can build their own bespoke applications with less code.
 
 ### Data Agents
+![chat_excel](https://github.com/eosphoros-ai/DB-GPT/assets/17919400/03d67da4-b9b9-4df3-8890-176a0941dab8)
+
 ![data agents](https://github.com/eosphoros-ai/DB-GPT/assets/17919400/ced393b4-9180-437a-90c5-b43633cda8cb)
 
 ## Contents
@@ -162,6 +164,12 @@ At present, we have introduced several key features to showcase our current capa
 
 - Please run `black .` before submitting the code.
 - To check detailed guidelines for new contributions, please refer [how to contribute](https://github.com/eosphoros-ai/DB-GPT/blob/main/CONTRIBUTING.md)
+
+### Contributors Wall
+<a href="https://github.com/eosphoros-ai/DB-GPT/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=eosphoros-ai/DB-GPT&max=200" />
+</a>
+
 
 
 ## Licence

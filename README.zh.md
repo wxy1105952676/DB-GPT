@@ -43,6 +43,8 @@ DB-GPT是一个开源的数据域大模型框架。目的是构建大模型领�
 ## 效果演示
 
 ### Data Agents 
+![chat_excel](https://github.com/eosphoros-ai/DB-GPT/assets/17919400/03d67da4-b9b9-4df3-8890-176a0941dab8)
+
 ![data agents](https://github.com/eosphoros-ai/DB-GPT/assets/17919400/ced393b4-9180-437a-90c5-b43633cda8cb)
 
 
@@ -175,10 +177,16 @@ DB-GPT是一个开源的数据域大模型框架。目的是构建大模型领�
 
 - [数据Agents](https://www.yuque.com/eosphoros/dbgpt-docs/gwz4rayfuwz78fbq)
 
-# 贡献
+## 贡献
 > 提交代码前请先执行 `black .`
 
 这是一个用于数据库的复杂且创新的工具, 我们的项目也在紧急的开发当中, 会陆续发布一些新的feature。如在使用当中有任何具体问题, 优先在项目下提issue, 如有需要, 请联系如下微信，我会尽力提供帮助，同时也非常欢迎大家参与到项目建设中。
+
+### 贡献者榜单 
+<a href="https://github.com/eosphoros-ai/DB-GPT/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=eosphoros-ai/DB-GPT&max=200" />
+</a>
+
 
 ## Licence
 
